@@ -34,9 +34,27 @@ export async function POST(request: NextRequest) {
         })
     }
 
-    if (event.type === 'customer.subscription.updated') {}
+    if (event.type === 'customer.subscription.updated') {
+      const subscription: Stripe.Subscription = event.data.object;
+      console.log(subscription);
+      // Update the plan_expires field in the stripe_customers table
+      const { error } = await supabaseAdmin
+        .from('stripe_customers')
+        .update({ plan_expires: subscription.cancel_at })
+        .eq('subscription_id', subscription.id);
 
-    if (event.type === 'customer.subscription.deleted') {}
+    }
+
+    if (event.type === 'customer.subscription.deleted') {
+
+      const subscription = event.data.object;
+      console.log(subscription);
+
+      const { error } = await supabaseAdmin
+      .from('stripe_customers')
+      .update({ plan_active: false, subscription_id: null })
+      .eq('subscription_id', subscription.id);
+    }
 
     return NextResponse.json({ message: 'success' });
   } catch (error: any) {

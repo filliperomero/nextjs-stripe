@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { supabase } from '@/utils/supabaseClient'
 import { User } from "@supabase/supabase-js"
 import LoginForm from './LoginForm'
+import PortalButton from "../portal/PortalButton"
 
 export default function UserProfile() {
   const [user, setUser] = useState<User | null>(null)
@@ -68,13 +69,16 @@ export default function UserProfile() {
           </div>
 
           <h2>Stripe Customer Data</h2>
-          {stripeCustomer ? (<>
-            <p>This data lives in the stripe_customers table in Supabase</p>
-            <div className="mockup-code">
-              <pre>
-                <code>{JSON.stringify(stripeCustomer, null, 2)}</code>
-              </pre>
-            </div>
+          {stripeCustomer ? (
+            <>
+              <p>This data lives in the stripe_customers table in Supabase</p>
+              <div className="mockup-code">
+                <pre>
+                  <code>{JSON.stringify(stripeCustomer, null, 2)}</code>
+                </pre>
+              </div>
+
+              <PortalButton />
             </>
           ) : (
             <div>
